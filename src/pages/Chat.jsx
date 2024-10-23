@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { FaPeopleGroup } from "react-icons/fa6"
 import coverImage from '../assets/chat_picture.png'
 
-const roomName = 'John Doe'
-
 const msgs = [
     {
         id: 1,
@@ -97,9 +95,13 @@ const msgs = [
     }
 ]
 
+    const chatroom = 'viber'
+    const user = 'John Doe'
+
 const Chat = () => {
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
+
 
     useEffect(() => {
         setMessages(msgs)
@@ -115,12 +117,12 @@ const Chat = () => {
                 <div className='flex flex-col mx-20 h-screen bg-gray-200 rounded-xl'>
                     <div className='flex flex-row font-bold text-3xl text-blue-900 bg-gray-300 rounded-xl py-10 '>
                         <h1 className='text-5xl pl-4' ><FaPeopleGroup /></h1>
-                        <h2 className='pl-4 '>Chat {roomName}</h2>
+                        <h2 className='pl-4 '>Chat {chatroom}</h2>
                     </div>
                     <div className='overflow-auto rounded-xl'>
                         {messages.map((msg, index) => (
                             <div key={index}  className='m-8'>
-                                { msg.user && msg.user === roomName ? 
+                                { msg.user && msg.user === user ? 
                                  <div className='flex flex-row justify-end'>
                                     <p className='text-right font-semibold rounded-xl p-2 bg-blue-200'>{msg.content}</p>
                                 </div>
