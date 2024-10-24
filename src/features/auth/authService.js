@@ -11,8 +11,15 @@ const login = async (userData) => {
     }
 }
 
+//Send message
+const sendMessage = async (userData) => {
+    const response = await axios.post(API_URL + '/join/message', userData)
+    return response.status
+}
+
 const authService = {
     login,
+    sendMessage,
 }
 
 export default authService

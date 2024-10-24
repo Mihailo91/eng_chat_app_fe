@@ -20,7 +20,7 @@ const Login = () => {
             toast.error(message)
         }
         
-        if(isSuccess){
+        if(isSuccess  ){
             navigate('/chat')
         }
         dispatch(reset())
