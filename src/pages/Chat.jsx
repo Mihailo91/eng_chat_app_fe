@@ -1,114 +1,39 @@
 import { useEffect, useState } from "react"
 import { FaPeopleGroup } from "react-icons/fa6"
 import coverImage from '../assets/chat_picture.png'
-import { useSelector } from "react-redux"
-
-const msgs = [
-    {
-        id: 1,
-        user: 'John Doe',
-        content: 'This program changed my life! I learned so much and met amazing people.',
-        country: 'Sweden',
-    },
-    {
-        id: 2,
-        user: 'Jane Smith',
-        content: 'Incredible experience! The instructors were top-notch and very supportive.',
-        country: 'Canada',
-    },
-    {
-        id: 3,
-        user: 'Emily Johnson',
-        content: 'I highly recommend this course. It provided me with the skills I needed to succeed.',
-        country: 'Germany',
-    },
-    {
-        id: 1,
-        user: 'John Doe',
-        content: 'This program changed my life! I learned so much and met amazing people.',
-        country: 'Sweden',
-    },
-    {
-        id: 2,
-        user: 'Jane Smith',
-        content: 'Incredible experience! The instructors were top-notch and very supportive.',
-        country: 'Canada',
-    },
-    {
-        id: 3,
-        user: 'Emily Johnson',
-        content: 'I highly recommend this course. It provided me with the skills I needed to succeed.',
-        country: 'Germany',
-    },
-    {
-        id: 1,
-        user: 'John Doe',
-        content: 'This program changed my life! I learned so much and met amazing people.',
-        country: 'Sweden',
-    },
-    {
-        id: 2,
-        user: 'Jane Smith',
-        content: 'Incredible experience! The instructors were top-notch and very supportive.',
-        country: 'Canada',
-    },
-    {
-        id: 3,
-        user: 'Emily Johnson',
-        content: 'I highly recommend this course. It provided me with the skills I needed to succeed.',
-        country: 'Germany',
-    },
-    {
-        id: 1,
-        user: 'John Doe',
-        content: 'This program changed my life! I learned so much and met amazing people.',
-        country: 'Sweden',
-    },
-    {
-        id: 2,
-        user: 'Jane Smith',
-        content: 'Incredible experience! The instructors were top-notch and very supportive.',
-        country: 'Canada',
-    },
-    {
-        id: 3,
-        user: 'Emily Johnson',
-        content: 'I highly recommend this course. It provided me with the skills I needed to succeed.',
-        country: 'Germany',
-    },
-    {
-        id: 1,
-        user: 'John Doe',
-        content: 'This program changed my life! I learned so much and met amazing people.',
-        country: 'Sweden',
-    },
-    {
-        id: 2,
-        user: 'Jane Smith',
-        content: 'Incredible experience! The instructors were top-notch and very supportive.',
-        country: 'Canada',
-    },
-    {
-        id: 3,
-        user: 'Emily Johnson',
-        content: 'I highly recommend this course. It provided me with the skills I needed to succeed.',
-        country: 'Germany',
-    }
-]
+import { useSelector, useDispatch } from 'react-redux'
+import { sendMessage, reset } from '../features/messages/messageSlice'
+import { toast } from "react-toastify"
 
 const Chat = () => {
-    const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState([])
+    const [chatMessage, setChatMessage] = useState('')
 
-    const { user } = useSelector((state) => state.auth)
-    const storedUser =user
+    const dispatch = useDispatch()
+
+    const { user } = useSelector(state => state.auth)
+    const storedUser = user
+
+    const { message, messages, isLoading, isError, isSuccess, errorMessage } = useSelector(state => state.message)
 
     useEffect(() => {
-        setMessages(msgs)
-    }, [])
+        if (isError) {
+            toast.error(errorMessage)
+        }
 
-    const sendMessage = () => {
-        setMessage('')
+        if (isSuccess) {
+            dispatch(reset())
+        }
+        dispatch(reset())
+    }, [isSuccess, isError, errorMessage, dispatch])
+
+    const createMessage = () => {
+        const userData = {
+            user: storedUser.user,
+            chatroom: storedUser.chatroom,
+            message: chatMessage,
+        }
+        dispatch(sendMessage(userData))
+        setChatMessage('')
     }
 
     return (
@@ -122,7 +47,7 @@ const Chat = () => {
                     <div className='overflow-auto rounded-xl'>
                         {messages.map((msg, index) => (
                             <div key={index} className='m-8'>
-                                {msg.user && msg.user === storedUser.use ?
+                                {msg.user && msg.user === storedUser.user ?
                                     <div className='flex flex-row justify-end'>
                                         <p className='text-right font-semibold rounded-xl p-2 bg-blue-200'>{msg.content}</p>
                                     </div>
@@ -136,19 +61,19 @@ const Chat = () => {
                     </div>
                     <div className='flex flex-row h-12xs pb-10 px-10'>
                         <input
-                            id='message'
+                            id='chatMessage'
                             type='text'
-                            name='message'
-                            value={message}
+                            name='chatMessage'
+                            value={chatMessage}
                             className='w-full py-2 px-2 bg-gray-100 rounded-md text-black'
                             placeholder='Enter your message here'
-                            onChange={(e) => setMessage(e.target.value)}
-                            onKeyDown={(e) => { if (e.key === 'Enter') sendMessage() }}
+                            onChange={(e) => setChatMessage(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') createMessage() }}
                             required
                         />
                         <button
-                            onClick={sendMessage}
-                            className='bg-gray-300 px-8 py-2 ml-3 text-black font-bold rounded-xl'>Send</button>
+                            onClick={createMessage}
+                            className='bg-gray-300 px-8 py-2 ml-3 text-black hover:bg-gray-400 font-bold rounded-xl'>Send</button>
                     </div>
                 </div>
             </div>
