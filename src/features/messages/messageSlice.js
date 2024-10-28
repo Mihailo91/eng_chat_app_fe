@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import messageService from './messageService'
+import { connect, sendMsg } from '../../socket/socket'
 
 const msgs = [
     {
@@ -115,6 +116,8 @@ export const sendMessage = createAsyncThunk('message/send',
             //     message: message,
             // }
             // console.log(messageData)
+            connect()
+            sendMsg('Hello from React')
             const response = await messageService.sendMessage(message)
             if (response.status === 200) {
                 return message.message

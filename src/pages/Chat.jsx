@@ -44,7 +44,7 @@ const Chat = () => {
                         <h1 className='text-5xl pl-4' ><FaPeopleGroup /></h1>
                         <h2 className='pl-4 '>Chat {storedUser.chatroom} </h2>
                     </div>
-                    <div className='overflow-auto rounded-xl'>
+                    <div className='overflow-auto h-full rounded-xl'>
                         {messages.map((msg, index) => (
                             <div key={index} className='m-8'>
                                 {msg.user && msg.user === storedUser.user ?
